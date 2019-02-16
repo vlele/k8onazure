@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysqldata-phpwebappbackend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysqldata-phpwebappbackend
+    spec:
+      containers:
+      - name: mysqldata-phpwebappbackend
+        image: davoodkhan/my-mysql
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "Temp123"
+      nodeSelector:
+        kubernetes.io/hostname: virtual-kubelet-virtual-kubelet-windows-eastus2
+      tolerations:
+      - key: virtual-kubelet.io/provider
+        operator: Equal
+        value: azure
+        effect: NoSchedule
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldata-phpwebappbackend
+  labels:
+   app: mysqldata-phpwebappbackend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3306
+  selector:
+    app: mysqldata-phpwebappbackend        
