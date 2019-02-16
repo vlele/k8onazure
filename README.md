@@ -1,6 +1,6 @@
 # k8onazure
-There are 12 modules in this series of demos for AKS. The folder structure is given below:
-"aks-class"
+# There are 12 modules in this series of demos for AKS. The folder structure is given below:
+## "aks-class"
 	|- Readme.txt  <-- This file provides the folder & file details
 	|- az-basic-cmd.bat <-- This batch file is used for setting up PowerShell environment. 
 	        [Step1: Execute above batch file with arg1=<subscription id>, arg2= eastus
