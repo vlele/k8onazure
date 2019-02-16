@@ -23,3 +23,17 @@
 	|- m10 - ACI, SVCCAT
 	|- m11 - Azure AKS demos
 	|- m12 - Istio,Prometheus,Grafana...
+
+	
+# "az-basic-cmd.bat" file
+It is executed in a powershell window in admin mode. It is used to login to azure and register necessary providers for AKS Cluster creation. Execute above batch file as below:
+"Example: .\az-basic-cmd.bat <subscription id>, <location>"
+> Note: 
+* Please use location as 'East US'/'Central US'/'West US 2'/'West Europe'/'Canada Central'/'Canada East region'
+
+# "create-aksclass-demo-cluster.ps1" file
+This PS Script file is used for for creating an AKS Cluster.Execute '.\az-basic-cmd.bat' batch file first.
+Example: .\create-aksclass-demo-cluster.ps1 <location>, <version>
+> Notes:
+* Allowed locations are 'East US'/'Central US'/'West US 2'/'West Europe'/'Canada Central'/'Canada East region'
+* Please use version > 1.11.x"
