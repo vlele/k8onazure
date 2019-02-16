@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: taskapi-aspnetcore-config-v1
+  namespace: prod
+  labels:
+    app: demo-taskapi
+    version: v1.0.0
+data:
+  config.json: |
+    {
+      "api": {
+        "baseUri": "http://192.168.137.90:30090"
+        "taskapiserviceversion": "v1.0.0"
+      }
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: m1pod
+  labels:
+    app: demo-taskapi
+    version: v1.0.0
+spec:
+  imagePullSecrets:
+    - name: taskapiacrsecret
+  containers:
+    - name: taskapi-aspnetcore
+      image: <Log-in-server>/taskapi-aspnetcore:v1
+      ports:
+        - containerPort: 80
+      env:
+        - name: "ASPNETCORE_ENVIRONMENT"
+          value: "prod"
+      volumeMounts:
+        - name: config-volume
+          mountPath: /app/wwwroot/config/
+      imagePullPolicy: Always
+  volumes:
+    - name: config-volume
+      configMap:
+        name: taskapi-aspnetcore-config-v1        
