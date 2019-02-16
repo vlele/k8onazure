@@ -1,0 +1,34 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: php-iislatest2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: php-iislatest2
+    spec:
+      containers:
+      - name: php-iislatest2
+        image: lelev/windowsservercore-ltsc2016       
+        ports:
+        - containerPort: 80                
+      nodeSelector:
+        kubernetes.io/hostname: virtual-kubelet-virtual-kubelet-windows-eastus
+      tolerations:
+      - key: virtual-kubelet.io/provider
+        operator: Equal
+        value: azure
+        effect: NoSchedule   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-iislatest2
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: php-iislatest2
