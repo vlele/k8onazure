@@ -18,12 +18,14 @@ Set-Alias k kubectl
 #--> Go to m10 module directory
 cd ..
 cd .\m10
+$env:AZURE_RG = "<azure resource group name>"
+$env:AKS_CLUSTER_NAME= "<AKS cluster name>"
 az aks get-credentials --resource-group ais-aksclass-rg --name aksclass-demo  --overwrite
 
 #--> View Dashboard
 kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
 
-az aks browse --resource-group ais-aksclass-rg --name aksclass-demo
+az aks browse --resource-group $env:AZURE_RG --name $env:AKS_CLUSTER_NAME
 
 #--> Create namespace "osba"
 kubectl create namespace osba
@@ -57,7 +59,7 @@ helm init --upgrade --service-account tiller
 helm repo update
 
 #-->Install the ACI connector for both OS types 
-az aks install-connector -g ais-aksclass-rg -n aksclass-demo --connector-name virtual-kubelet --os-type both      
+az aks install-connector -g $env:AZURE_RG -n $env:AKS_CLUSTER_NAME --connector-name virtual-kubelet --os-type both      
 
 #--> Check all pods again and see that two pods with names starting with "virtual-kubelet-..." exists in AKS cluster 
 kubectl get pods -o wide --all-namespaces
@@ -82,11 +84,10 @@ kubectl get pods -o wide --all-namespaces
 #--> Clean up
 kubectl delete -f manifests/virtual-kubelet-windows-phpiis-ltsc2016.yaml
 kubectl delete -f manifests/virtual-kubelet-linux-nginx.yaml
-kubectl delete -f manifests\rbac-virtual-kubelet.yaml
 
 #--> Remove connector 
-az aks remove-connector --resource-group ais-aksclass-rg --name aksclass-demo --connector-name virtual-kubelet --os-type windows 
-az aks remove-connector --resource-group ais-aksclass-rg --name aksclass-demo --connector-name virtual-kubelet --os-type linux
+az aks remove-connector --resource-group $env:AZURE_RG --name $env:AKS_CLUSTER_NAME --connector-name virtual-kubelet --os-type windows 
+az aks remove-connector --resource-group $env:AZURE_RG --name $env:AKS_CLUSTER_NAME --connector-name virtual-kubelet --os-type linux
 
 ##
 ##   Open Service Broker
@@ -196,8 +197,3 @@ kubectl delete -f manifests\deployment.yaml
 kubectl delete -f manifests\deployment_Fail.yaml
 kubectl delete namespace osba
 kubectl delete namespace osba-quickstart
-
- 
-
-
-
